@@ -30,6 +30,22 @@ function Landingpage() {
             <img src={mobileIllustrationImg} width="367" height="550" />
           </picture>
         </section>
+        <section className="stats">
+          <ul className="stats__container">
+            <li className="stats__item flex-container">
+              <h2 className="item__title">2K+</h2>
+              <p className="item__subtitle">Daily Users</p>
+            </li>
+            <li className="stats__item flex-container">
+              <h2 className="item__title">98%</h2>
+              <p className="item__subtitle">Satisfaction Rate</p>
+            </li>
+            <li className="stats__item flex-container">
+              <h2 className="item__title">5M+</h2>
+              <p className="item__subtitle">Files Stored</p>
+            </li>
+          </ul>
+        </section>
       </main>
       <Footer />
     </>
