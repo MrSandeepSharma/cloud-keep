@@ -1,5 +1,6 @@
 import Logo from "./Logo";
 import { Header } from "./Header";
 import Footer from "./Footer";
+import Input from "./Input"
 
-export { Logo, Header, Footer }
+export { Logo, Header, Footer, Input }

@@ -1,0 +1,46 @@
+.input__container {
+    position: relative;
+}
+
+.inputIcon {
+    position: relative;
+    width: 100%;
+}
+
+.inputIcon .icon {
+    position: absolute;
+    left: .75rem;
+    top: 50%;
+    z-index: 100;
+    width: 20px;
+    height: 20px;
+    transform: translateY(-50%);
+}
+
+.inputIcon .input-field {
+    padding-left: 3rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: .75rem;
+    outline: 0;
+    border: 1px solid var(--clr-accent-100);
+    border-radius: 6px;
+}
+
+.error-text {
+    position: absolute;
+    color: red;
+    font-size: 12px;
+}
+
+.error-field {
+    border-color: red;
+}
+
+@media (min-width:600px) {
+    .error-text {
+        font-size: 14px;
+    }
+}
