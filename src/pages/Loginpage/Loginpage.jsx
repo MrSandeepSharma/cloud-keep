@@ -1,4 +1,4 @@
-import { Header } from "../../components"
+import { Footer, Header } from "../../components"
 
 import "./loginpage.css"
 
@@ -9,6 +9,7 @@ function Loginpage() {
       <main id="main">
         <h1>Login Page</h1>
       </main>
+      <Footer />
     </>
   )
 }

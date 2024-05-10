@@ -1,4 +1,4 @@
-import { Header } from "../../components"
+import { Footer, Header } from "../../components"
 
 import "./landingpage.css"
 
@@ -9,6 +9,7 @@ function Landingpage() {
       <main id="main">
         <h1>Landing Page</h1>
       </main>
+      <Footer />
     </>
   )
 }
