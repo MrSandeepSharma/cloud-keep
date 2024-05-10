@@ -1,0 +1,35 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--gap);
+    background-color: var(--clr-primary-400);
+    padding: var(--padding);
+}
+
+.footer .footer__social {
+    margin: 0;
+    padding: 0;
+}
+
+.footer__social .social__item {
+    list-style: none;
+}
+
+.footer__social a {
+    text-decoration: none;
+    display: block;
+}
+
+.footer__social a svg {
+    width: 30px;
+    height: 30px;
+    color: var(--clr-accent-100);
+}
+
+@media (min-width: 600px) {
+    .footer__social a svg {
+        width: 35px;
+        height: 35px;
+    }
+}
