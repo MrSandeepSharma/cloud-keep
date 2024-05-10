@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import App from './App.jsx'
+import { Loginpage, Signuppage, RouteController, Errorpage } from './pages'
 
 import './index.css'
 
@@ -10,19 +11,19 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <h1>Error Page</h1>,
+    errorElement: <Errorpage />,
     children: [
       {
         path: "/",
-        element: <h1>Home Page</h1>
+        element: <RouteController />
       },
       {
         path: "/login",
-        element: <h1>Login Page</h1>
+        element: <Loginpage />
       },
       {
         path: "/signup",
-        element: <h1>Signup Page</h1>
+        element: <Signuppage />
       }
     ]
   }
