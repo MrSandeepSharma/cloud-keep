@@ -1,3 +1,7 @@
+.homepage {
+    padding-bottom: 2rem;
+}
+
 .homepage .hero .hero__details {
     padding-block: 1.5rem;
     gap: 1.5rem;
@@ -61,7 +65,6 @@
     align-items: center;
     gap: var(--gap);
     margin-top: 4rem;
-    margin-bottom: 2rem;
     padding-top: 20rem;
     padding-bottom: 2rem;
 }
