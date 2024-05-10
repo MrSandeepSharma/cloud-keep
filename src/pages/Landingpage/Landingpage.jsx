@@ -5,6 +5,8 @@ import "./landingpage.css"
 
 import mobileIllustrationImg from "../../assets/mobile-illustration.png"
 import mobileIllustrationLargeImg from "../../assets/mobile-illustration-large.png"
+import testimonialLarge from "../../assets/testimonial-large.png"
+import testimonialSmall from "../../assets/testimonial-small.png"
 
 import { FaArrowRight } from "react-icons/fa6";
 
@@ -45,6 +47,28 @@ function Landingpage() {
               <p className="item__subtitle">Files Stored</p>
             </li>
           </ul>
+        </section>
+        <section className="testimonial">
+          <picture className="testimonial__img">
+            <source srcSet={testimonialLarge} media="(min-width: 600px)" width="527.56" height="700" />
+            <img src={testimonialSmall} alt="" width="263.75" height="350" />
+          </picture>
+          <div className="testimonial__detail">
+            <h2 className="testimonial__title">
+              Why Cloud Keep Is Perfect for You
+            </h2>
+            <p className="testimonial__desc">
+              Discover the perfect solution for seamless file management. 
+              Our website offers intuitive design and powerful features, making it the 
+              ideal choice for streamlining your workflow and boosting productivity.
+            </p>
+            <p className="testimonial__name">
+              Sandeep Sharma
+            </p>
+            <p className="testimonial__work">
+              The Developer
+            </p>
+          </div>
         </section>
       </main>
       <Footer />
