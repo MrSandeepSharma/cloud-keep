@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from "react-redux"
 
 import { Primarybtn } from "../../components/Button"
+import { HomeHeader } from "../../components"
 
 import authService from "../../firebase-local/auth"
 import { logout } from "../../store/authSlice"
@@ -18,11 +19,14 @@ function Homepage() {
 }
 
   return (
-    <main id="main">
-      <h1>{user ? user.displayName : ""}</h1>
-      <h3>{user ? user.email : ""}</h3>
-      <Primarybtn type="button" text="Logout User" onClick={logoutUser} />
-    </main>
+    <>
+      <HomeHeader />
+      <main id="main">
+        <h1>{user ? user.displayName : ""}</h1>
+        <h3>{user ? user.email : ""}</h3>
+        <Primarybtn type="button" text="Logout User" onClick={logoutUser} />
+      </main>
+    </>
   )
 }
 
