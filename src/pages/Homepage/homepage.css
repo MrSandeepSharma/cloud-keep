@@ -1,0 +1,40 @@
+.homepage__main {
+    padding-bottom: 80px;
+}
+
+.blankpage {
+    min-height: 80vh;
+}
+
+.min-height-60 {
+    min-height: 60vh;
+}
+
+.blankpage .blankpage__inner {
+    flex-direction: column;
+}
+
+.blankpage__inner img {
+    width: 100px;
+}
+
+.blankpage__inner h2 {
+    font-family: var(--ff-heading);
+    font-size: var(--fs-600);
+}
+
+.blankpage__inner p {
+    text-align: center;
+    max-width: 300px;
+}
+
+@media (min-width:600px) {
+    .homepage__main {
+        padding-bottom: unset;
+    }
+
+    .homepage__main {
+        margin-left: 250px;
+        margin-top: 100px;
+    }
+}

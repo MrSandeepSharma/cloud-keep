@@ -7,8 +7,9 @@ import { Loader, LoadingScreen } from "./Loader";
 import AuthLayout from "./AuthLayout";
 import DetectOutsideClick from "./DetectOutsideClick"
 import Profile from "./Profile";
+import SideNav from "./Sidenav";
 
 export { Logo, Header, Footer, Input, InputPassword, ToastMsg, 
     Loader, AuthLayout, LoadingScreen, Profile, DetectOutsideClick,
-    InputSearch, HomeHeader
+    InputSearch, HomeHeader, SideNav
 }

@@ -1,0 +1,123 @@
+.sidenav {
+    position: fixed;
+    bottom: -1rem;
+    width: 100%;
+    z-index: 200000;
+}
+
+.sidenav .sidenav__menu {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background-color: var(--clr-accent-600);
+    padding-left: 0;
+}
+
+.sidenav__menu .menu__item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.menu__item svg, 
+.menu__item img {
+    width: 20px;
+    height: 20px;
+}
+
+.menu-active {
+    background-color: var(--clr-primary-400);
+}
+
+.sidenav__toggle {
+    position: absolute;
+    top: -2.5rem;
+    right: 0;
+}
+
+.toggle__btn {
+    font-size: var(--fs-500);
+    background-color: var(--clr-accent-700);
+    margin-left: auto;
+    margin-right: 1.5rem;
+    position: relative;
+}
+
+.toggle__menu {
+    position: absolute;
+    top: -8.2rem;
+    right: 1.5rem;
+    width: 250px;
+    background-color: var(--clr-accent-600);
+    padding-left: 0;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: .5rem;
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s ease-in-out;
+    border-radius: 6px 6px 0 6px;
+}
+
+.toggle__menu .menu__item {
+    width: 100%;
+}
+
+.toggle__menu .menu__item .btn-secondary {
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.toggle__btn[aria-expanded=true] ~ .toggle__menu {
+    visibility: unset;
+    opacity: unset;
+}
+
+@media (min-width:600px) {
+    .sidenav {
+        bottom: unset;
+        left: 0;
+        top: 5rem;
+        width: 250px;
+        min-height: 100vh;
+        background-color: var(--clr-accent-600);
+        padding-top: .5rem;
+    }
+    
+    .sidenav .sidenav__menu {
+        flex-direction: column;
+        justify-content: space-around;
+    }
+    
+    .sidenav__menu .menu__item {
+        flex-direction: row;
+        justify-content: flex-start;
+        padding-left: 2rem;
+        border-radius: 20px;
+    }
+
+    .sidenav__toggle {
+        position: unset;
+    }
+    
+    .toggle__btn {
+        margin-left: 2rem;
+    }
+    
+    .toggle__menu {
+        position: absolute;
+        top: 0;
+        right: unset;
+        left: 11rem;
+        width: 300px;
+        border-radius: 0 6px 6px 6px;
+    }
+}
