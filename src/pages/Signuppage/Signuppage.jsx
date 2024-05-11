@@ -4,6 +4,7 @@ import { Footer, Header, Input, InputPassword } from "../../components"
 import { Primarybtn, Secondarybtn } from "../../components/Button"
 
 import { generateOTP, validateForm } from "../../utils";
+import sendEmail from "../../email/sendEmail"
 
 import "./signuppage.css"
 
@@ -15,11 +16,16 @@ function Signuppage() {
   const [showOtp, setShowOtp] = useState(false)
   const [OTP, setOTP] = useState("")
   const [errMsg, setErrMsg] = useState([{username: "", email: "", password: "", otp: ""}])
+  const [newUser, setNewUser] = useState("")
 
   function sendOTP(e) {
     e.preventDefault()
     // Get Form Data
     const formData = new FormData(e.currentTarget);
+    const username = formData.get("username");
+    const email = formData.get("email")
+    const password = formData.get("password")
+
     const fields = [
       { name: "username", required: true },
       { name: "email", required: true },
@@ -33,9 +39,12 @@ function Signuppage() {
       return;
     }
 
+    setNewUser({username: username, email: email, password: password})
     const otp = generateOTP()
     setShowOtp(true)
     setOTP(otp)
+    sendEmail(email, otp)
+
     console.log("OTP Sent", otp)
   }
 
@@ -68,6 +77,7 @@ function Signuppage() {
   function resendOTP() {
     const otp = generateOTP()
     setOTP(otp)
+    sendEmail(newUser.email, otp)
     console.log("OTP Resend", otp)
   }
 
