@@ -29,6 +29,22 @@
     border-radius: 6px;
 }
 
+/* input password */
+.password__container {
+    position: relative;
+}
+
+.password__btn {
+    position: absolute;
+    right: .75rem;
+    top: 50%;
+    z-index: 100;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: 0;
+    font-family: var(--ff-base-500);
+}
+
 .error-text {
     position: absolute;
     color: red;
