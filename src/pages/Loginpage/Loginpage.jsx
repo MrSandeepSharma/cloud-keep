@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-import { Footer, Header, Input, InputPassword } from "../../components"
+import { Footer, Header, Input, InputPassword, Loader, ToastMsg } from "../../components"
 import { Primarybtn, Secondarybtn } from "../../components/Button"
 
 import { validateForm } from "../../utils";
+import authService from "../../firebase-local/auth"
 
 import "./loginpage.css"
 
@@ -14,12 +16,15 @@ function Loginpage() {
   const [errMsg, setErrMsg] = useState([{email: "", password: ""}])
   const [showForgetPasswordSection, setShowForgetPasswordSection] = useState(false)
   const [showMsgSection, setShowMsgSection] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  function loginUser(e) {
+  async function loginUser(e) {
     e.preventDefault()
 
     // Get Form Data
     const formData = new FormData(e.currentTarget);
+    const email = formData.get("email")
+    const password = formData.get("password")
 
     // Form Validation
     const fields = [
@@ -33,7 +38,25 @@ function Loginpage() {
       return;
     }
 
-    console.log("User Login Success")
+    try {
+      setLoading(true)
+      const user = await authService.loginUserUsingEmail(email, password)
+      const userData = {
+          email: user.user.email,
+          displayName: user.user.displayName,
+          photoURL: user.user.photoURL,
+          uid: user.user.uid
+      }
+
+      if(userData) {
+        toast.success("User Login Successfully!")
+        setLoading(false)
+      }
+
+    } catch (error) {
+      toast.error("Please check your input again!")
+      setLoading(false)
+    }
   }
 
   function forgetPassword() {
@@ -57,8 +80,12 @@ function Loginpage() {
       return;
     }
 
-    console.log("verification Link Send..")
-    setShowMsgSection(true)
+    try {
+      authService.forgotPassword(email)
+      setShowMsgSection(true)
+    } catch (error) {
+      toast.error("Please check your email again!")
+    }
   }
 
   function backToLoginPage() {
@@ -70,6 +97,10 @@ function Loginpage() {
     <>
       <Header className="bg-clr-accent-600" btnPath="/signup" btnText="Create New Account" />
       <main id="main" className="bg-clr-accent-600 container loginpage-wrapper">
+        <ToastMsg />
+        {
+          loading ? <Loader /> : ""
+        }
         <section className="loginpage">
           <h1 className="loginpage__title">Login Page</h1>
           <p className="loginpage__desc">
