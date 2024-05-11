@@ -1,0 +1,73 @@
+.profile {
+    position: relative;
+    width: fit-content;
+    z-index: 2000;
+}
+
+.profile__btn {
+    background: transparent;
+    border: 0;
+}
+
+.profile__menu {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+    width: 200px;
+    right: 0;
+    top: 3.8rem;
+    background-color: var(--clr-accent-600);
+    color: var(--clr-accent-100);
+    padding: 1.5rem;
+    transition: .3s ease-in-out;
+    border-radius: 0 0 6px 6px;
+}
+
+.profile__menu p {
+    margin-bottom: 1rem;
+    font-size: var(--fs-500);
+}
+
+.profile__menu .btn-secondary {
+    width: 100%;
+    flex-direction: row-reverse;
+}
+
+.profile__btn[aria-expanded=true] ~ .profile__menu {
+    visibility: unset;
+    opacity: unset;
+    transform: unset;
+}
+
+.profile__btn .image {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+}
+
+.profile__btn .image img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+}
+
+.profile .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: var(--fs-500);
+    font-family: var(--ff-base-500);
+}
+
+@media (min-width: 600px) {
+    .profile .image {
+        width: 50px;
+        height: 50px;
+        font-size: 30px;
+    }
+
+    .profile__menu {
+        top: 4.5rem;
+        width: 250px;
+    }
+}
