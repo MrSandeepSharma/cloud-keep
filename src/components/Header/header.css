@@ -4,3 +4,30 @@
     justify-content: space-between;
     padding: var(--padding);
 }
+
+.homeheader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    background-color: var(--clr-accent-600);
+    z-index: 200000;
+}
+
+.homeheader .search__container {
+    margin-left: auto;
+}
+
+.homeheader .header__logo {
+    margin-right: 1rem;
+}
+
+@media (min-width: 600px) {
+    .homeheader {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        right: 0;
+    }
+}

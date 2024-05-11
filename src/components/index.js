@@ -1,5 +1,5 @@
 import Logo from "./Logo";
-import { Header } from "./Header";
+import { Header, HomeHeader } from "./Header";
 import Footer from "./Footer";
 import { Input, InputPassword, InputSearch } from "./Input"
 import ToastMsg from "./ToastMsg";
@@ -10,5 +10,5 @@ import Profile from "./Profile";
 
 export { Logo, Header, Footer, Input, InputPassword, ToastMsg, 
     Loader, AuthLayout, LoadingScreen, Profile, DetectOutsideClick,
-    InputSearch
+    InputSearch, HomeHeader
 }
