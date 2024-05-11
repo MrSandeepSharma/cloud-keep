@@ -110,12 +110,54 @@ function Signuppage() {
     }
   }
 
-  function loginWithGoogle() {
-    console.log("Login Succesful!")
+  async function loginWithGoogle() {
+    setLoading(true)
+    try {
+      const userData = await authService.loginUserUsingGoogle()
+      if (userData) {
+          const user = await authService.getCurrentUser()
+          
+          const userData = {
+              email: user.email,
+              displayName: user.displayName,
+              photoURL: user.photoURL,
+              uid: user.uid
+          }
+
+          if(userData) {
+            toast.success("User Created Successfully!")
+            console.log(userData)
+            setLoading(false)
+          }
+      }
+    } catch (error) {
+      toast.error("Check your internet connection!")
+    }
   }
 
-  function loginAsGhost() {
-    console.log("Login Succesful!")
+  async function loginAsGhost() {
+    setLoading(true)
+    try {
+      const userData = await authService.loginUserAsGhost()
+      if (userData) {
+        const user = await authService.getCurrentUser()
+        
+        const userData = {
+            email: user.email,
+            displayName: "Ghost Account",
+            photoURL: user.photoURL,
+            uid: user.uid
+        } 
+
+        if(userData) {
+          toast.success("User Created Successfully!")
+          console.log(userData)
+          setLoading(false)
+        }
+
+    }} catch (error) {
+        toast.error("Check your internet connection!")
+    }
   }
 
   return (
