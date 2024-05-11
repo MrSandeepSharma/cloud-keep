@@ -15,7 +15,7 @@ function InputPassword({ icon="", className="", errTxt="", ...rest }) {
   return (
     <div className="password__container">
         <Input type={showPassword ? "text" : "password"} icon={icon} className={className} errTxt={errTxt} {...rest} />
-        <button className="password__btn" onClick={toggle}>
+        <button type="button" className="password__btn" onClick={toggle}>
             {
                 showPassword ? "Hide" : "Show"
             }
