@@ -60,13 +60,13 @@ body {
  
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: var(--clr-accent-600); 
+  background: var(--clr-primary-400); 
   border-radius: 0;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--clr-accent-600); 
+  background: var(--clr-primary-400); 
 }
 
 /* utility classes */
