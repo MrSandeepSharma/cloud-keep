@@ -55,6 +55,26 @@
     border-color: red;
 }
 
+/* input search */
+.search__container {
+    position: relative;
+}
+
+.search__container ul {
+    padding-left: 0;
+    position: absolute;
+    background-color: var(--clr-accent-600);
+    width: 100vw;
+    padding: 1rem;
+    padding-top: 0;
+    left: 0;
+    border-radius: 0 0 6px;
+}
+
+.search__container ul li {
+    list-style: none;
+}
+
 @media (min-width:600px) {
     .error-text {
         font-size: 14px;

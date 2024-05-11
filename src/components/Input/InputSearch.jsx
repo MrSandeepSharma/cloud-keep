@@ -32,6 +32,7 @@ function InputSearch({ className = "", data = [], ...rest }) {
         value={value}
         onChange={handleChange}
         onFocus={() => setShowResults(true)}
+        onBlur={() => setShowResults(false)}
         {...rest}
       />
       {showResults && (

@@ -12,7 +12,7 @@
 .profile__menu {
     opacity: 0;
     visibility: hidden;
-    position: absolute;
+    position: fixed;
     width: 200px;
     right: 0;
     top: 3.8rem;
