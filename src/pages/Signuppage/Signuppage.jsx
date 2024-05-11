@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 
-import { Footer, Header, Input, InputPassword } from "../../components"
+import { Footer, Header, Input, InputPassword, ToastMsg } from "../../components"
 import { Primarybtn, Secondarybtn } from "../../components/Button"
 
 import { generateOTP, validateForm } from "../../utils";
@@ -45,7 +46,7 @@ function Signuppage() {
     setOTP(otp)
     sendEmail(email, otp)
 
-    console.log("OTP Sent", otp)
+    toast.success("Your first OTP text has been sent. Keep your phone nearby!")
   }
 
   function submitOTP(e) {
@@ -78,7 +79,7 @@ function Signuppage() {
     const otp = generateOTP()
     setOTP(otp)
     sendEmail(newUser.email, otp)
-    console.log("OTP Resend", otp)
+    toast.success("Your OTP email has been resent. Keep an eye on your inbox!")
   }
 
   function loginWithGoogle() {
@@ -93,6 +94,7 @@ function Signuppage() {
     <>
       <Header className="bg-clr-accent-600" btnPath="/login" btnText="Already have an Account" />
       <main id="main" className="bg-clr-accent-600 container signuppage-wrapper">
+        <ToastMsg />
         <section className="signuppage">
           <h1 className="signuppage__title">Signup</h1>
           <p className="signuppage__desc">
