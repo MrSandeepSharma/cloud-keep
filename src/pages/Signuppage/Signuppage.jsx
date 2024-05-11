@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-import { Footer, Header, Input, InputPassword, ToastMsg } from "../../components"
+import { Footer, Header, Input, InputPassword, Loader, ToastMsg } from "../../components"
 import { Primarybtn, Secondarybtn } from "../../components/Button"
 
 import { generateOTP, validateForm } from "../../utils";
 import sendEmail from "../../email/sendEmail"
+import authService from "../../firebase-local/auth"
 
 import "./signuppage.css"
 
@@ -18,6 +19,7 @@ function Signuppage() {
   const [OTP, setOTP] = useState("")
   const [errMsg, setErrMsg] = useState([{username: "", email: "", password: "", otp: ""}])
   const [newUser, setNewUser] = useState("")
+  const [loading, setLoading] = useState(false)
 
   function sendOTP(e) {
     e.preventDefault()
@@ -72,7 +74,7 @@ function Signuppage() {
       return;
     }
 
-    console.log("OTP Submitted")
+    createNewUserUsingEmail(newUser)
   }
 
   function resendOTP() {
@@ -80,6 +82,32 @@ function Signuppage() {
     setOTP(otp)
     sendEmail(newUser.email, otp)
     toast.success("Your OTP email has been resent. Keep an eye on your inbox!")
+  }
+
+  async function createNewUserUsingEmail() {
+    setLoading(true)
+    try {
+      const userData = await authService.createUserUsingEmail(newUser.email, newUser.password, newUser.username)
+      if (userData) {
+          const user = await authService.getCurrentUser()
+          
+          const userData = {
+              email: user.email,
+              displayName: newUser.username,
+              photoURL: user.photoURL,
+              uid: user.uid
+          }
+
+          if(userData) {
+            toast.success("User Created Successfully!")
+            console.log(userData)
+            setLoading(false)
+          }
+
+      }
+    } catch (error) {
+      toast.error("Please check your email again!")
+    }
   }
 
   function loginWithGoogle() {
@@ -95,6 +123,9 @@ function Signuppage() {
       <Header className="bg-clr-accent-600" btnPath="/login" btnText="Already have an Account" />
       <main id="main" className="bg-clr-accent-600 container signuppage-wrapper">
         <ToastMsg />
+        {
+          loading ? <Loader /> : ""
+        }
         <section className="signuppage">
           <h1 className="signuppage__title">Signup</h1>
           <p className="signuppage__desc">
