@@ -1,7 +1,13 @@
+import { useSelector } from "react-redux"
+
 import Landingpage from "./Landingpage"
+import Homepage from "./Homepage"
 
 function RouteController() {
-  return <Landingpage />
+
+  const authStatus = useSelector(state => state.auth.status)
+
+  return authStatus ? <Homepage /> : <Landingpage />
 }
 
 export default RouteController;
