@@ -8,3 +8,28 @@
     align-items: center;
     z-index: 1000;
 }
+
+/* Loading Screen */
+.loadingscreen {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.loadingscreen .icon {
+    width: 100px;
+    height: 100px;
+    margin-top: auto;
+}
+
+.loadingscreen .logo {
+    margin-bottom: 6rem;
+    margin-top: auto;
+}

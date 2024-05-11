@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useDispatch } from "react-redux";
 
-import { Loader } from './components';
+import { LoadingScreen } from './components';
 import { login } from "./store/authSlice";
 
 import './App.css'
@@ -34,7 +34,7 @@ function App() {
 
   }, [])
 
-  return !loading ? <Outlet /> : <Loader />
+  return !loading ? <Outlet /> : <LoadingScreen />
 
 }
 
