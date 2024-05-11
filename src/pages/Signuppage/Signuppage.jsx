@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import { Footer, Header, Input, InputPassword, Loader, ToastMsg } from "../../components"
@@ -7,6 +9,7 @@ import { Primarybtn, Secondarybtn } from "../../components/Button"
 import { generateOTP, validateForm } from "../../utils";
 import sendEmail from "../../email/sendEmail"
 import authService from "../../firebase-local/auth"
+import { login } from "../../store/authSlice";
 
 import "./signuppage.css"
 
@@ -20,6 +23,9 @@ function Signuppage() {
   const [errMsg, setErrMsg] = useState([{username: "", email: "", password: "", otp: ""}])
   const [newUser, setNewUser] = useState("")
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   function sendOTP(e) {
     e.preventDefault()
@@ -100,13 +106,15 @@ function Signuppage() {
 
           if(userData) {
             toast.success("User Created Successfully!")
-            console.log(userData)
+            dispatch(login(userData))
+            navigate("/")
             setLoading(false)
           }
 
       }
     } catch (error) {
       toast.error("Please check your email again!")
+      setLoading(false)
     }
   }
 
@@ -126,12 +134,14 @@ function Signuppage() {
 
           if(userData) {
             toast.success("User Created Successfully!")
-            console.log(userData)
+            dispatch(login(userData))
+            navigate("/")
             setLoading(false)
           }
       }
     } catch (error) {
       toast.error("Check your internet connection!")
+      setLoading(false)
     }
   }
 
@@ -151,12 +161,14 @@ function Signuppage() {
 
         if(userData) {
           toast.success("User Created Successfully!")
-          console.log(userData)
+          dispatch(login(userData))
+          navigate("/")
           setLoading(false)
         }
 
     }} catch (error) {
         toast.error("Check your internet connection!")
+        setLoading(false)
     }
   }
 

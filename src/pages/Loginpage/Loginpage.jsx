@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 
 import { Footer, Header, Input, InputPassword, Loader, ToastMsg } from "../../components"
@@ -6,6 +8,7 @@ import { Primarybtn, Secondarybtn } from "../../components/Button"
 
 import { validateForm } from "../../utils";
 import authService from "../../firebase-local/auth"
+import { login } from "../../store/authSlice";
 
 import "./loginpage.css"
 
@@ -17,6 +20,9 @@ function Loginpage() {
   const [showForgetPasswordSection, setShowForgetPasswordSection] = useState(false)
   const [showMsgSection, setShowMsgSection] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   async function loginUser(e) {
     e.preventDefault()
@@ -50,6 +56,8 @@ function Loginpage() {
 
       if(userData) {
         toast.success("User Login Successfully!")
+        dispatch(login(userData))
+        navigate("/")
         setLoading(false)
       }
 
