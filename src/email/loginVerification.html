@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password Reset Request for Cloud Keep</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #F7F9FC; /* Light Background */
+    color: #303C42; /* Dark Text */
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+  }
+  h1 {
+    font-size: 25px;
+  }
+  .container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #FFFFFF; /* White Background */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .logo {
+    display: block;
+    margin: 1rem auto;
+    width: 213px;
+  }
+  .reset-message {
+    text-align: center;
+    margin-top: 20px;
+  }
+  .reset-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #7DADF5; /* Blue Color */
+    color: #FFFFFF; /* White Text */
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  .reset-link:hover {
+    background-color: #5F8CDC; /* Darker Blue Color */
+  }
+  .expiration {
+    margin-top: 18px;
+    text-align: center;
+  }
+  .thank-you {
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <img src="https://firebasestorage.googleapis.com/v0/b/cloud-keep-c6c50.appspot.com/o/Frame%2045.png?alt=media&token=01f85aea-f320-4869-8f9f-84c8d7022c6c" alt="Cloud keep" class="logo">
+  <div class="reset-message">
+    <h1>Password Reset Request for Cloud Keep</h1>
+    <p>We received a request to reset your password. If this was you, click the button below to reset your password:</p>
+    <a href=`%LINK%` class="reset-link">Reset Password</a>
+  </div>
+  <div class="expiration">
+    <p>This link will expire in 24 hours.</p>
+  </div>
+  <div class="thank-you">
+    <p>If you did not request this password reset, you can safely ignore this email.</p>
+    <p>Thank you!</p>
+  </div>
+</div>
+</body>
+</html>
