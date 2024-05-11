@@ -7,9 +7,13 @@ import { validateForm } from "../../utils";
 
 import "./loginpage.css"
 
+import { FaChevronLeft } from "react-icons/fa";
+
 function Loginpage() {
 
   const [errMsg, setErrMsg] = useState([{email: "", password: ""}])
+  const [showForgetPasswordSection, setShowForgetPasswordSection] = useState(false)
+  const [showMsgSection, setShowMsgSection] = useState(false)
 
   function loginUser(e) {
     e.preventDefault()
@@ -33,7 +37,33 @@ function Loginpage() {
   }
 
   function forgetPassword() {
-    console.log("Forget Password")
+    setShowForgetPasswordSection(true)
+  }
+
+  function resetPassword(e) {
+    e.preventDefault();
+    // Get Form Data
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get("email")
+
+    // Form Validation
+    const fields = [
+      { name: "email", required: true }
+    ];
+
+    const errors = validateForm(formData, fields);
+    if (Object.keys(errors).length > 0) {
+      setErrMsg(errors);
+      return;
+    }
+
+    console.log("verification Link Send..")
+    setShowMsgSection(true)
+  }
+
+  function backToLoginPage() {
+    setShowForgetPasswordSection(false)
+    setShowMsgSection(false)
   }
 
   return (
@@ -45,14 +75,46 @@ function Loginpage() {
           <p className="loginpage__desc">
             Welcome to Cloud Keep, your seamless gateway to organized files and effortless collaboration
           </p>
-          <div className="loginpage__inner">
-              <form onSubmit={loginUser} className="signup__form">
-                <Input errTxt={errMsg.email && errMsg.email} type="email" name="email" placeholder="Enter Your Email Here ...*" />
-                <InputPassword errTxt={errMsg.password && errMsg.password} name="password" placeholder="Enter Your Password Here ...*" />
-                <Primarybtn type="submit" text="Login Now!" />
-              </form>
-              <Secondarybtn type="button" text="Forget Password" onClick={forgetPassword} />
-          </div>
+          {
+            showForgetPasswordSection
+              ? (
+                  showMsgSection 
+                    ? (
+                      <div className="forgetpass__container msg__section">
+                        <h2 className="forgetpass__title">Reset Your Password</h2>
+                        <p className="forgetpass__desc">
+                        A password reset link has been sent to your registered email address. Please check your inbox 
+                        (and also the spam folder, just in case) for an email from us. Click on the link 
+                        provided in the email to reset your password and regain access to your account.
+                        </p>
+                        <Secondarybtn icon={<FaChevronLeft />} type="btn" text="back to Login Page" onClick={backToLoginPage} />
+                      </div>
+                    ) : (
+                      <div className="forgetpass__container">
+                        <Secondarybtn icon={<FaChevronLeft />} type="btn" text="back to Login Page" onClick={backToLoginPage} />
+                        <h2 className="forgetpass__title">Reset Your Password</h2>
+                        <form onSubmit={resetPassword}>
+                            <Input errTxt={errMsg.email && errMsg.email} type="email" name="email" placeholder="Enter Your Email Here ...*" />
+                            <Primarybtn type="submit" text="Send Verfication Link" />
+                        </form>
+                        <p className="forgetpass__desc">
+                          We've got you covered. Enter your email address below, and we'll 
+                          send you an email verfication link and after clicking on the link you can reset your password. Let's get you 
+                          back on track!
+                        </p>
+                      </div>
+                    )
+                ) : (
+                  <div className="loginpage__inner">
+                      <form onSubmit={loginUser} className="signup__form">
+                        <Input errTxt={errMsg.email && errMsg.email} type="email" name="email" placeholder="Enter Your Email Here ...*" />
+                        <InputPassword errTxt={errMsg.password && errMsg.password} name="password" placeholder="Enter Your Password Here ...*" />
+                        <Primarybtn type="submit" text="Login Now!" />
+                      </form>
+                      <Secondarybtn type="button" text="Forget Password" onClick={forgetPassword} />
+                  </div>
+                )
+            }
         </section>
       </main>
       <Footer />
