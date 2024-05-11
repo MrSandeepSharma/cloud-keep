@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Footer, Header, Input, InputPassword } from "../../components"
 import { Primarybtn, Secondarybtn } from "../../components/Button"
 
-import { validateForm } from "../../utils";
+import { generateOTP, validateForm } from "../../utils";
 
 import "./signuppage.css"
 
@@ -33,9 +33,10 @@ function Signuppage() {
       return;
     }
 
+    const otp = generateOTP()
     setShowOtp(true)
-    setOTP("456789")
-    console.log("OTP Sent")
+    setOTP(otp)
+    console.log("OTP Sent", otp)
   }
 
   function submitOTP(e) {
@@ -60,12 +61,14 @@ function Signuppage() {
       setErrMsg(errors);
       return;
     }
-    
+
     console.log("OTP Submitted")
   }
 
   function resendOTP() {
-    console.log("OTP Resend")
+    const otp = generateOTP()
+    setOTP(otp)
+    console.log("OTP Resend", otp)
   }
 
   function loginWithGoogle() {
