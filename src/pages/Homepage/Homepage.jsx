@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
@@ -30,6 +30,7 @@ function Homepage() {
   ]
  
   const path = useSelector(state => state.currentFolder.path)
+  const user = useSelector(state => state.auth.userData)
   const [activeMenu, setActiveMenu] = useState("My Files")
   const [isCreateFolderPopupOpen, setIsCreateFolderPopupOpen] = useState(false)
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
@@ -72,11 +73,27 @@ function Homepage() {
     try {
       database.addFolder(folderName, path)
       closePopup(setIsCreateFolderPopupOpen)
+      fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
       toast.success(folderName + " Folder Created Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
     }
   }
+
+  const fetchData = useCallback(async (dataType, setData, errorMessage) => {
+    try {
+      const fetchedData = await database.getData(path, user, dataType);
+      const filteredData = fetchedData.filter(item => item !== undefined);
+      setData(filteredData);
+      console.log(`Fetching ${dataType} data....`);
+    } catch (error) {
+      toast.error(errorMessage);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
+  }, [fetchData, path, user, setFolders]);
 
   return (
     <>
@@ -100,13 +117,18 @@ function Homepage() {
 
         {
           activeMenu === "My Files" && (
-            <div className="blankpage flex-container">
-              <div className="blankpage__inner flex-container">
-                <img src={myFileImg} alt="cloud keep" />
-                <h2>Cloud Keep</h2>
-                <p>A place for all of your files</p>
-              </div>
-            </div>
+            folders 
+              ? (
+                folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)
+              ) : (
+                <div className="blankpage flex-container">
+                  <div className="blankpage__inner flex-container">
+                    <img src={myFileImg} alt="cloud keep" />
+                    <h2>Cloud Keep</h2>
+                    <p>A place for all of your files</p>
+                  </div>
+                </div>
+              )
           )
         }
         {
