@@ -3,12 +3,14 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
 import { HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
+import { Secondarybtn } from "../../components/Button";
 import { openPopup, closePopup } from "../../utils/popup";
 import database from "../../firebase-local/database"
 
 import "./homepage.css"
 
 import { MdOutlineFileUpload, MdCreateNewFolder } from "react-icons/md";
+import { FaChevronLeft } from "react-icons/fa";
 
 import myFileImg from "../../assets/logo.svg"
 import trashImg from "../../assets/empty_state_trash.svg"
@@ -81,6 +83,10 @@ function Homepage() {
     }
   }
 
+  function backFolder() {
+    console.log("Folder back")
+  }
+
   const fetchData = useCallback(async (dataType, setData, errorMessage) => {
     try {
       setIsLoading(true);
@@ -126,7 +132,15 @@ function Homepage() {
             activeMenu === "My Files" && (
               folders 
                 ? (
-                  folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)
+                  <div className="myfiles">
+                    <div className="myfiles__hero">
+                          {
+                            path != "root" && <Secondarybtn type="button" icon={<FaChevronLeft />} onClick={backFolder} />
+                          }
+                          <p className="folder__path">/{path}</p>
+                    </div>
+                    {folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)}
+                  </div>
                 ) : (
                   <div className="blankpage flex-container">
                     <div className="blankpage__inner flex-container">

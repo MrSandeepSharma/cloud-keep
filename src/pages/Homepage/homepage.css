@@ -29,6 +29,19 @@
     max-width: 300px;
 }
 
+/* myFiles Hero */
+.myfiles__hero {
+    padding: var(--padding);
+    gap: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.myfiles__hero .folder__path {
+    font-family: var(--ff-heading);
+    font-size: var(--fs-600);
+}
+
 /* Create Folder Popup */
 .createfolder__popup {
     padding: 1rem 0 0;
