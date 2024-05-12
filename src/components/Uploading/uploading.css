@@ -1,0 +1,13 @@
+.uploader {
+    position: fixed;
+    top: 5rem;
+    right: 1.5rem;
+}
+
+@media (min-width: 600px) {
+    .uploader {
+        top: unset;
+        right: 2rem;
+        bottom: 3rem;
+    }
+}

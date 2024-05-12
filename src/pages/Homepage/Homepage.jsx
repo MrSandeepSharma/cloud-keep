@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
 
-import { FileFolderList, HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
+import { FileFolderList, HomeHeader, Input, Loader, Popup, SideNav, ToastMsg, Uploading } from "../../components"
 import { Secondarybtn } from "../../components/Button";
 import { openPopup, closePopup } from "../../utils/popup";
 import database from "../../firebase-local/database"
@@ -43,6 +43,7 @@ function Homepage() {
   const [folders, setFolders] = useState([])
   const [allFiles, setAllFiles] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const dispatch = useDispatch()
 
   function openCreateFolderPopup() {
@@ -131,10 +132,14 @@ function Homepage() {
 
     closeIsUploadFilePopup()
     try {
+      setIsUploading(true)
       const fileType = checkImageType(file) ? "img" : "file";
       const uploadedFile = await database.addFile(file, path, fileType);
 
       if (uploadedFile) {
+        setIsUploading(false)
+        toast.success("File Uploaded Successfully")
+        fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
         console.log("file uploaded Succesfully", uploadedFile)
       }
     } catch (error) {
@@ -227,6 +232,9 @@ function Homepage() {
         <div className="toast-wrapper">
           <ToastMsg />
         </div>
+        {
+          isUploading && <Uploading />
+        }
         {/* Popups */}
         {
           isCreateFolderPopupOpen && (

@@ -10,8 +10,10 @@ import Profile from "./Profile";
 import SideNav from "./Sidenav";
 import Popup from "./Popup";
 import FileFolderList from "./FileFolderList";
+import Uploading from "./Uploading";
 
 export { Logo, Header, Footer, Input, InputPassword, ToastMsg, 
     Loader, AuthLayout, LoadingScreen, Profile, DetectOutsideClick,
-    InputSearch, HomeHeader, SideNav, Popup, FileFolderList
+    InputSearch, HomeHeader, SideNav, Popup, FileFolderList,
+    Uploading
 }
