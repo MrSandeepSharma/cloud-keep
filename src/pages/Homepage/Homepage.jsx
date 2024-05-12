@@ -115,9 +115,31 @@ function Homepage() {
     openPopup(setIsUploadFilePopupOpen)
   }
 
-  function uploadFile(e) {
-    e.preventDefault()
-    console.log("Upload File")
+  async function uploadFile(e) {
+    e.preventDefault() 
+
+    const newErrors = {};
+    if (!file) {
+      newErrors.file = "Please select a file first!"
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrMsg(newErrors);
+      return;
+    }
+
+    closeIsUploadFilePopup()
+    try {
+      const fileType = checkImageType(file) ? "img" : "file";
+      const uploadedFile = await database.addFile(file, path, fileType);
+
+      if (uploadedFile) {
+        console.log("file uploaded Succesfully", uploadedFile)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Check Your Internet Connection!")
+    }
   }
 
   function closeIsUploadFilePopup() {
