@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-import { HomeHeader, Input, Popup, SideNav, ToastMsg } from "../../components"
+import { HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
 import { openPopup, closePopup } from "../../utils/popup";
 import database from "../../firebase-local/database"
 
@@ -35,6 +35,7 @@ function Homepage() {
   const [isCreateFolderPopupOpen, setIsCreateFolderPopupOpen] = useState(false)
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
   function openCreateFolderPopup() {
     openPopup(setIsCreateFolderPopupOpen)
@@ -82,12 +83,15 @@ function Homepage() {
 
   const fetchData = useCallback(async (dataType, setData, errorMessage) => {
     try {
+      setIsLoading(true);
       const fetchedData = await database.getData(path, user, dataType);
       const filteredData = fetchedData.filter(item => item !== undefined);
       setData(filteredData);
       console.log(`Fetching ${dataType} data....`);
     } catch (error) {
       toast.error(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -116,20 +120,23 @@ function Homepage() {
         }
 
         {
-          activeMenu === "My Files" && (
-            folders 
-              ? (
-                folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)
-              ) : (
-                <div className="blankpage flex-container">
-                  <div className="blankpage__inner flex-container">
-                    <img src={myFileImg} alt="cloud keep" />
-                    <h2>Cloud Keep</h2>
-                    <p>A place for all of your files</p>
+          isLoading ? (
+            <Loader className="homeloader" />
+          ) : (
+            activeMenu === "My Files" && (
+              folders 
+                ? (
+                  folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)
+                ) : (
+                  <div className="blankpage flex-container">
+                    <div className="blankpage__inner flex-container">
+                      <img src={myFileImg} alt="cloud keep" />
+                      <h2>Cloud Keep</h2>
+                      <p>A place for all of your files</p>
+                    </div>
                   </div>
-                </div>
-              )
-          )
+                )
+          ) )
         }
         {
           activeMenu === "Starred" && (
