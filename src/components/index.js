@@ -9,8 +9,9 @@ import DetectOutsideClick from "./DetectOutsideClick"
 import Profile from "./Profile";
 import SideNav from "./Sidenav";
 import Popup from "./Popup";
+import FileFolderList from "./FileFolderList";
 
 export { Logo, Header, Footer, Input, InputPassword, ToastMsg, 
     Loader, AuthLayout, LoadingScreen, Profile, DetectOutsideClick,
-    InputSearch, HomeHeader, SideNav, Popup
+    InputSearch, HomeHeader, SideNav, Popup, FileFolderList
 }
