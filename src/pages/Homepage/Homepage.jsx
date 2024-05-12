@@ -246,22 +246,16 @@ function Homepage() {
     const fileId = e.target.dataset.folderid
     const file = allFiles.filter(file => file[1] === fileId)
 
-    // Remove from files Collection
     try {
+      const dataCollection = {...file,}
+      database.addCollection("bin", dataCollection)
+      
       database.deleteData("files", fileId)
       fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
       toast.success("file Deleted Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
     }
-
-    // Add to Bin Collection
-    // try {
-    //   database.addFolder(file, "root")
-    // } catch (error) {
-    //   toast.error("Check Your Internet Connection!")
-    // }
-    console.log(file)
   }
 
   function closeIsFilePreviewOpen() {
