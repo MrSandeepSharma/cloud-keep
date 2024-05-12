@@ -37,12 +37,14 @@ function Homepage() {
   const [activeMenu, setActiveMenu] = useState("My Files")
   const [isCreateFolderPopupOpen, setIsCreateFolderPopupOpen] = useState(false)
   const [isUploadFilePopupOpen, setIsUploadFilePopupOpen] = useState(false)
+  const [isFilePreviewOpen, setIsFilePreviewOpen] = useState(false)
   const [file, setFile] = useState("")
   const [fileObj, setFileObj] = useState("")
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
   const [allFiles, setAllFiles] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isFilePreviewLoading, setIsFilePreviewLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const dispatch = useDispatch()
 
@@ -192,6 +194,42 @@ function Homepage() {
     }
   }
 
+  function openFile(e) {
+    const fileId = e.currentTarget.dataset.fileid
+    const fileData = allFiles.filter(file => file && file[1] === fileId)
+    const file = fileData[0][0]
+    setFileObj(file)
+    setIsFilePreviewOpen(true)
+    setIsFilePreviewLoading(true)
+    
+    if (file.fileType != "img") {
+      fetch(file.path)
+        .then(response => {
+            if (!response.ok) {
+                toast.error("Check Your Internet Connection")
+                return
+            }
+            return response.text();
+        })
+        .then(data => {
+            const updatedFile = { ...file, data: data };
+            setFileObj(updatedFile);
+            setIsFilePreviewLoading(false)
+            console.log(456)
+        })
+        .catch(error => {
+          setIsFilePreviewLoading(false)
+          toast.error("Check Your Internet Connection")
+          return
+        });
+    }
+  }
+
+  function closeIsFilePreviewOpen() {
+    closePopup(setIsFilePreviewOpen)
+    setFileObj("")
+  }
+
   const checkType = (file) => {
     const previewableTypes = /^(image\/(jpg|jpeg|png|gif|svg)|text\/(plain|csv|json|xml|html|css|javascript|typescript|php|python|java|cpp|c|ruby|perl|shell|sql))/i;
     return previewableTypes.test(file.type);
@@ -291,6 +329,30 @@ function Homepage() {
             )
         }
         {
+          isFilePreviewOpen && (
+            <Popup text="Download" closeFunc={closeIsFilePreviewOpen}>
+              <div className="preview__wrapper">
+                <h2 className="preview__title">{fileObj.name}</h2>
+                {
+                  isFilePreviewLoading && <Loader className="preview-loader" /> 
+                }
+                {
+                  fileObj.fileType === "img"
+                  ? (
+                    <div className="previewimg-container flex-container">
+                      <img src={fileObj.path} alt={fileObj.name} onLoad={()=>{setIsFilePreviewLoading(false)}} />
+                    </div>
+                  ) : (
+                    <div className="preview-container flex-container">
+                      <textarea value={fileObj.data} disabled></textarea>
+                    </div>
+                  )
+                }
+              </div>
+            </Popup>
+          )
+        }
+        {
           isLoading ? (
             <Loader className="homeloader" />
           ) : (
@@ -318,7 +380,7 @@ function Homepage() {
                             allFiles.length != 0 && (
                               <div className="files__container">
                                 <h2 className="files__title">All Files and Images</h2>
-                                <FileFolderList items={allFiles} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={deleteFolder} />
                               </div>
                             )
                           }

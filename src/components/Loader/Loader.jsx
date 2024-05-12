@@ -2,9 +2,9 @@ import "./loader.css"
 
 import loaderGif from "../../assets/loader.gif"
 
-function Loader() {
+function Loader({ className="" }) {
   return (
-    <div className="loader">
+    <div className={`loader ${className}`}>
       <img src={loaderGif} alt="loader" />
     </div>
   )

@@ -149,6 +149,41 @@
     height: 100%;
 }
 
+/* File Preview */
+.preview__wrapper {
+    height: 350px;
+    position: relative;
+}
+
+.preview__wrapper h2 {
+    margin-bottom: .5rem;
+    font-family: var(--ff-heading);
+}
+
+.preview__wrapper .previewimg-container {
+    height: 100%;
+    padding-bottom: 2rem;
+}
+
+.preview__wrapper .previewimg-container img{
+    height: 100%;
+}
+
+.preview__wrapper .preview-container {
+    min-height: 100%;
+    align-items: flex-start;
+}
+
+.preview__wrapper .preview-container textarea {
+    min-height: 290px;
+}
+
+/* loader */
+.preview-loader {
+    min-height: unset;
+    height: 100%;
+}
+
 @media (min-width:600px) {
     .homepage__main {
         padding-bottom: unset;
