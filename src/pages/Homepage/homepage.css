@@ -52,4 +52,9 @@
         margin-left: 250px;
         margin-top: 100px;
     }
+
+    .toast-wrapper{
+        position: relative;
+        z-index: 888888888888;
+    }
 }
