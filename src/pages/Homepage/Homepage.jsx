@@ -127,6 +127,12 @@ function Homepage() {
       newErrors.file = "Please select a file first!"
     }
 
+    if (allFiles.some(files => files && files[0].name === file.name)) {
+      closeIsUploadFilePopup()
+      toast.error('File already exists with this name change the file name!')
+      newErrors.file = 'File already exists change the file name!';
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrMsg(newErrors);
       return;
