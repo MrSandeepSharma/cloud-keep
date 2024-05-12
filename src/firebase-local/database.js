@@ -27,11 +27,12 @@ class Database {
         }
     }
 
-    async addFolder(folderName, path) {
+    async addCollection(collectionName, collectionData) {
         try {
-            const docRef = await addDoc(collection(this.db, "folders"), {
-                name: folderName,
-                userPath: path,
+            const docRef = await addDoc(collection(this.db, collectionName), {
+                ...collectionData,
+                // name: folderName,
+                // userPath: path,
                 userId: String(this.auth.currentUser.uid),
             });
             return docRef

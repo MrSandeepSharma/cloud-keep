@@ -83,7 +83,11 @@ function Homepage() {
     }
 
     try {
-      database.addFolder(folderName, path)
+      const dataCollection = {
+        name: folderName,
+        userPath: path,
+      }
+      database.addCollection("folders", dataCollection)
       closePopup(setIsCreateFolderPopupOpen)
       fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
       toast.success(folderName + " Folder Created Succesfully")
