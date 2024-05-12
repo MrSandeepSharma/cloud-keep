@@ -3,7 +3,7 @@ import { useState } from "react";
 import DetectOutsideClick from "../DetectOutsideClick";
 import { Primarybtn } from "../Button";
 
-import "./filefolderlist.css"
+import "./filefolder.css"
 
 import { FaFolder, FaFileAlt, FaFileImage } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";

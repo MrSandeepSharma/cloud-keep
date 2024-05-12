@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 
-import { HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
+import { FileFolderList, HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
 import { Secondarybtn } from "../../components/Button";
 import { openPopup, closePopup } from "../../utils/popup";
 import database from "../../firebase-local/database"
@@ -83,6 +83,14 @@ function Homepage() {
     }
   }
 
+  function openFolder() {
+    console.log('Open')
+  }
+
+  function deleteFolder() {
+    console.log("Deleted")
+  }
+
   function backFolder() {
     console.log("Folder back")
   }
@@ -134,12 +142,14 @@ function Homepage() {
                 ? (
                   <div className="myfiles">
                     <div className="myfiles__hero">
-                          {
-                            path != "root" && <Secondarybtn type="button" icon={<FaChevronLeft />} onClick={backFolder} />
-                          }
-                          <p className="folder__path">/{path}</p>
+                      {
+                        path != "root" && <Secondarybtn type="button" icon={<FaChevronLeft />} onClick={backFolder} />
+                      }
+                      <p className="folder__path">/{path}</p>
                     </div>
-                    {folders.map(folder => <h1 key={folder[1]}>{folder[0].name}</h1>)}
+                    <section className="folder__container">
+                      <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                    </section>
                   </div>
                 ) : (
                   <div className="blankpage flex-container">
