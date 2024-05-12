@@ -232,6 +232,28 @@ function Homepage() {
     database.downloadFile(url, filename)
   }
 
+  function moveToBinFile(e) {
+    const fileId = e.target.dataset.folderid
+    const file = allFiles.filter(file => file[1] === fileId)
+
+    // Remove from files Collection
+    try {
+      database.deleteData("files", fileId)
+      fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
+      toast.success("file Deleted Succesfully")
+    } catch (error) {
+      toast.error("Check Your Internet Connection!")
+    }
+
+    // Add to Bin Collection
+    // try {
+    //   database.addFolder(file, "root")
+    // } catch (error) {
+    //   toast.error("Check Your Internet Connection!")
+    // }
+    console.log(file)
+  }
+
   function closeIsFilePreviewOpen() {
     closePopup(setIsFilePreviewOpen)
     setFileObj("")
@@ -387,7 +409,7 @@ function Homepage() {
                             allFiles.length != 0 && (
                               <div className="files__container">
                                 <h2 className="files__title">All Files and Images</h2>
-                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={deleteFolder} />
+                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={moveToBinFile} />
                               </div>
                             )
                           }
