@@ -48,9 +48,20 @@
     font-size: var(--fs-600);
 }
 
-/* folder__container */
-.folder__container {
+/* my files inner */
+.myfiles__inner {
     padding-top: 4.5rem;
+}
+
+.folder__container {
+    margin-bottom: 2rem;
+}
+
+.folder__container .folder__title,
+.files__container .files__title {
+    font-size: var(--fs-500);
+    font-family: var(--ff-heading);
+    margin-bottom: 1rem;
 }
 
 /* Create Folder Popup */
@@ -148,9 +159,18 @@
         margin-top: 100px;
     }
 
-    /* folder__container */
+    /* my files inner */
+    .myfiles__inner {
+        padding-top: 5rem;
+    }
+
     .folder__container {
-        padding-top: 6.5rem;
+        margin-bottom: 5rem;
+    }
+
+    .folder__container .folder__title,
+    .files__container .files__title {
+        margin-bottom: 2rem;
     }
 
     .toast-wrapper{

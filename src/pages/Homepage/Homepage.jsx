@@ -41,6 +41,7 @@ function Homepage() {
   const [fileObj, setFileObj] = useState("")
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
+  const [allFiles, setAllFiles] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
 
@@ -214,6 +215,10 @@ function Homepage() {
     fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
   }, [fetchData, setFolders]);
 
+  useEffect(() => {
+    fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
+  }, [fetchData, setAllFiles]);
+
   return (
     <>
       <HomeHeader />
@@ -290,10 +295,25 @@ function Homepage() {
                   <p className="folder__path">/{path}</p>
                 </div>
                 {
-                  folders.length != 0 
+                  folders.length != 0 || allFiles.length != 0
                     ? (
-                        <section className="folder__container">
-                          <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                        <section className="myfiles__inner">
+                          {
+                            folders.length != 0 && (
+                              <div className="folder__container">
+                                <h2 className="folder__title">All Folders</h2>
+                                <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                              </div>
+                            )
+                          }
+                          {
+                            allFiles.length != 0 && (
+                              <div className="files__container">
+                                <h2 className="files__title">All Files and Images</h2>
+                                <FileFolderList items={allFiles} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                              </div>
+                            )
+                          }
                         </section>
                     ) : (
                       <div className="blankpage flex-container">
