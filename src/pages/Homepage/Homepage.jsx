@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { HomeHeader, SideNav } from "../../components"
+import { HomeHeader, Input, Popup, SideNav } from "../../components"
 
 import "./homepage.css"
 
@@ -16,7 +16,7 @@ function Homepage() {
     {
         title: "Create New Folder",
         icon: MdCreateNewFolder,
-        onClick: () => {}
+        onClick: openCreateFolderPopup
     },
     {
         title: "Upload New File",
@@ -26,12 +26,35 @@ function Homepage() {
   ]
  
   const [activeMenu, setActiveMenu] = useState("My Files")
+  const [isCreateFolderPopupOpen, setIsCreateFolderPopupOpen] = useState(false)
+  const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
+
+  function openCreateFolderPopup() {
+    setIsCreateFolderPopupOpen(true)
+  }
+
+  function createFolder(e) {
+    e.preventDefault()
+    console.log("Folder Created")
+  }
 
   return (
     <>
       <HomeHeader />
       <SideNav toggleNavItems={toggleNavItems} active={activeMenu} onClick={(e)=>{setActiveMenu(e.currentTarget.textContent)}} />
       <main id="main" className="homepage__main">
+        {/* Popups */}
+        {
+          isCreateFolderPopupOpen && (
+              <Popup text="Create Folder" onSubmit={createFolder} closeFunc={ ()=> setIsCreateFolderPopupOpen(false)}>
+                <div className="createfolder__popup">
+                  <h2>Create New Folder</h2>
+                  <Input errTxt={errMsg.folderName && errMsg.folderName} type="text" name="folderName" placeholder="New Folder" />
+                </div>
+              </Popup>
+            )
+        }
+
         {
           activeMenu === "My Files" && (
             <div className="blankpage flex-container">

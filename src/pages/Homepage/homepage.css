@@ -28,6 +28,21 @@
     max-width: 300px;
 }
 
+/* Create Folder Popup */
+.createfolder__popup {
+    padding: 1rem 0 0;
+}
+
+.createfolder__popup h2 {
+    font-family: var(--ff-heading);
+    font-size: var(--fs-600);
+    margin-bottom: 1.25rem;
+}
+
+.createfolder__popup .input__container{
+    margin-bottom: 1.5rem;
+}
+
 @media (min-width:600px) {
     .homepage__main {
         padding-bottom: unset;
