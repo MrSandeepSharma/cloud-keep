@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { FileFolderList, HomeHeader, Input, Loader, Popup, SideNav, ToastMsg } from "../../components"
 import { Secondarybtn } from "../../components/Button";
 import { openPopup, closePopup } from "../../utils/popup";
 import database from "../../firebase-local/database"
+import { setCurrentFolder } from "../../store/currentFolderSlice"
 
 import "./homepage.css"
 
@@ -38,6 +39,7 @@ function Homepage() {
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const dispatch = useDispatch()
 
   function openCreateFolderPopup() {
     openPopup(setIsCreateFolderPopupOpen)
@@ -83,16 +85,27 @@ function Homepage() {
     }
   }
 
-  function openFolder() {
-    console.log('Open')
+  function openFolder(e) {
+    const folderName =  e.currentTarget.textContent 
+    dispatch(setCurrentFolder(path + "/" + folderName))
   }
 
-  function deleteFolder() {
-    console.log("Deleted")
+  function deleteFolder(e) {
+    const folderId = e.target.dataset.folderid
+    try {
+      database.deleteData("folders", folderId)
+      fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
+      toast.success("Folder Deleted Succesfully")
+    } catch (error) {
+      toast.error("Check Your Internet Connection!")
+    }
   }
 
   function backFolder() {
-    console.log("Folder back")
+    const newPath = path.split("/")
+    const lastFolder = newPath[newPath.length - 1]
+    newPath.pop(lastFolder)
+    dispatch(setCurrentFolder(newPath.join("/")))
   }
 
   const fetchData = useCallback(async (dataType, setData, errorMessage) => {
@@ -107,11 +120,11 @@ function Homepage() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [path, user]);
 
   useEffect(() => {
     fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
-  }, [fetchData, path, user, setFolders]);
+  }, [fetchData, setFolders]);
 
   return (
     <>
