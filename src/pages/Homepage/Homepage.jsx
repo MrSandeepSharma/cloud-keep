@@ -225,6 +225,13 @@ function Homepage() {
     }
   }
 
+  function downloadFile(e) {
+    e.preventDefault()
+    const url = fileObj.path
+    const filename = fileObj.name
+    database.downloadFile(url, filename)
+  }
+
   function closeIsFilePreviewOpen() {
     closePopup(setIsFilePreviewOpen)
     setFileObj("")
@@ -330,7 +337,7 @@ function Homepage() {
         }
         {
           isFilePreviewOpen && (
-            <Popup text="Download" closeFunc={closeIsFilePreviewOpen}>
+            <Popup text="Download" onSubmit={downloadFile} closeFunc={closeIsFilePreviewOpen}>
               <div className="preview__wrapper">
                 <h2 className="preview__title">{fileObj.name}</h2>
                 {
