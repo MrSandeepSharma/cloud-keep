@@ -11,7 +11,7 @@ import { setCurrentFolder } from "../../store/currentFolderSlice"
 import "./homepage.css"
 
 import { MdOutlineFileUpload, MdCreateNewFolder } from "react-icons/md";
-import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronLeft, FaPlus } from "react-icons/fa";
 
 import myFileImg from "../../assets/logo.svg"
 import trashImg from "../../assets/empty_state_trash.svg"
@@ -28,7 +28,7 @@ function Homepage() {
     {
         title: "Upload New File",
         icon: MdOutlineFileUpload,
-        onClick: () => {}
+        onClick: openUploadFilePopup
     },
   ]
  
@@ -36,6 +36,9 @@ function Homepage() {
   const user = useSelector(state => state.auth.userData)
   const [activeMenu, setActiveMenu] = useState("My Files")
   const [isCreateFolderPopupOpen, setIsCreateFolderPopupOpen] = useState(false)
+  const [isUploadFilePopupOpen, setIsUploadFilePopupOpen] = useState(false)
+  const [file, setFile] = useState("")
+  const [fileObj, setFileObj] = useState("")
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -108,6 +111,69 @@ function Homepage() {
     dispatch(setCurrentFolder(newPath.join("/")))
   }
 
+  function openUploadFilePopup() {
+    openPopup(setIsUploadFilePopupOpen)
+  }
+
+  function uploadFile(e) {
+    e.preventDefault()
+    console.log("Upload File")
+  }
+
+  function closeIsUploadFilePopup() {
+    closePopup(setIsUploadFilePopupOpen)
+    setFile("")
+    setErrMsg({})
+    setFileObj("")
+  }
+
+  function previewFile(e) {
+    const newFile = e.target.files[0]
+    const newErrors = {};
+    if (!checkType(newFile)) {
+      newErrors.file = "Sorry, you can only upload image files or text-based files."
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrMsg(newErrors);
+      return;
+    }
+
+    if (checkImageType(newFile)) {
+      const fileObj = {
+        name: newFile.name,
+        size: newFile.size,
+        type: newFile.type,
+        url: URL.createObjectURL(newFile)
+      }
+      setFile(newFile)
+      setFileObj(fileObj)
+    } else{
+      let reader = new FileReader();
+      reader.onload = function(event) {
+      const fileObj = {
+        name: newFile.name,
+        size: newFile.size,
+        type: newFile.type,
+        url: event.target.result
+      }
+      setFile(newFile)
+      setFileObj(fileObj)
+      };
+      reader.readAsText(newFile);
+    }
+  }
+
+  const checkType = (file) => {
+    const previewableTypes = /^(image\/(jpg|jpeg|png|gif|svg)|text\/(plain|csv|json|xml|html|css|javascript|typescript|php|python|java|cpp|c|ruby|perl|shell|sql))/i;
+    return previewableTypes.test(file.type);
+  };
+
+  const checkImageType = (file) => {
+    const previewableTypes = /^image\/(jpeg|jpg|png|gif|svg\+xml)$/i;
+    return previewableTypes.test(file.type);
+  };
+
   const fetchData = useCallback(async (dataType, setData, errorMessage) => {
     try {
       setIsLoading(true);
@@ -145,7 +211,50 @@ function Homepage() {
               </Popup>
             )
         }
-
+        {
+          isUploadFilePopupOpen && (
+              <Popup text="Upload File" onSubmit={uploadFile} closeFunc={closeIsUploadFilePopup}>
+                <div className="uploadfile__popup">
+                  <h2>Upload New File</h2>
+                  <p className="file__name">{fileObj.name ? fileObj.name : "New File"}</p>
+                  <div className="file__details flex-container">
+                    <div className="file__details__inner">
+                      <p className="file__size">File Size</p>
+                      <p>{fileObj.size ? fileObj.size : "-- --"}</p>
+                    </div>
+                    <div className="file__details__inner">
+                      <p className="file__type">File Type</p>
+                      <p>{fileObj.type ? fileObj.type : "-- --"}</p>
+                    </div>
+                  </div>
+                  {
+                    file != ""
+                      ? (
+                        checkImageType(file)
+                          ? (
+                            <div className="preview-container flex-container">
+                              <img src={fileObj.url} alt="file" />
+                            </div>
+                          ) : (
+                            <div className="preview-container flex-container">
+                              <textarea value={fileObj.url} disabled></textarea>
+                            </div>
+                          ) 
+                      ) : (
+                        <div className="file-container flex-container">
+                          <label className="file-label flex-container" htmlFor="file">
+                            <FaPlus /> 
+                            <p>Upload New File</p>
+                            <p className="error-text">{errMsg.file && errMsg.file}</p>
+                          </label>
+                          <Input id="file" type="file" name="fileName" onChange={previewFile} />
+                        </div>
+                      )
+                  }
+                </div>
+              </Popup>
+            )
+        }
         {
           isLoading ? (
             <Loader className="homeloader" />
