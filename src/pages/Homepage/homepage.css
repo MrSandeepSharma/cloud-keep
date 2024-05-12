@@ -30,16 +30,27 @@
 }
 
 /* myFiles Hero */
+.myfiles {
+    position: relative;
+}
+
 .myfiles__hero {
+    position: absolute;
     padding: var(--padding);
     gap: 1rem;
     display: flex;
     align-items: center;
+    z-index: 2000;
 }
 
 .myfiles__hero .folder__path {
     font-family: var(--ff-heading);
     font-size: var(--fs-600);
+}
+
+/* folder__container */
+.folder__container {
+    padding-top: 4.5rem;
 }
 
 /* Create Folder Popup */
@@ -65,6 +76,11 @@
     .homepage__main {
         margin-left: 250px;
         margin-top: 100px;
+    }
+
+    /* folder__container */
+    .folder__container {
+        padding-top: 6.5rem;
     }
 
     .toast-wrapper{

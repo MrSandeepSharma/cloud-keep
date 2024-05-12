@@ -151,29 +151,31 @@ function Homepage() {
             <Loader className="homeloader" />
           ) : (
             activeMenu === "My Files" && (
-              folders 
-                ? (
-                  <div className="myfiles">
-                    <div className="myfiles__hero">
-                      {
-                        path != "root" && <Secondarybtn type="button" icon={<FaChevronLeft />} onClick={backFolder} />
-                      }
-                      <p className="folder__path">/{path}</p>
-                    </div>
-                    <section className="folder__container">
-                      <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
-                    </section>
-                  </div>
-                ) : (
-                  <div className="blankpage flex-container">
-                    <div className="blankpage__inner flex-container">
-                      <img src={myFileImg} alt="cloud keep" />
-                      <h2>Cloud Keep</h2>
-                      <p>A place for all of your files</p>
-                    </div>
-                  </div>
-                )
-          ) )
+              <div className="myfiles">
+                <div className="myfiles__hero">
+                  {
+                    path != "root" && <Secondarybtn type="button" icon={<FaChevronLeft />} onClick={backFolder} />
+                  }
+                  <p className="folder__path">/{path}</p>
+                </div>
+                {
+                  folders.length != 0 
+                    ? (
+                        <section className="folder__container">
+                          <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                        </section>
+                    ) : (
+                      <div className="blankpage flex-container">
+                        <div className="blankpage__inner flex-container">
+                          <img src={myFileImg} alt="cloud keep" />
+                          <h2>Cloud Keep</h2>
+                          <p>A place for all of your files. Create a New Folder or Upload a File</p>
+                        </div>
+                      </div>
+                    )
+                }
+              </div>
+          ))
         }
         {
           activeMenu === "Starred" && (
