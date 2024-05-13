@@ -11,12 +11,16 @@ class Database {
         this.auth= getAuth(app)
     }
 
-    async getData(userPath, user, dataCollection) {
+    async getData(userPath, user, dataCollection, dataType=false) {
         try {
             const querySnapshot = await getDocs(collection(this.db, dataCollection));
             const data = querySnapshot.docs.map(doc => {
                 if (doc.data().userId === user.uid ) {
-                    if(doc.data().userPath === userPath) {
+                    if (dataType) {
+                        if(doc.data().userPath === userPath) {
+                            return [doc.data(), doc.id]
+                        }
+                    } else {
                         return [doc.data(), doc.id]
                     }
                 }
@@ -31,8 +35,6 @@ class Database {
         try {
             const docRef = await addDoc(collection(this.db, collectionName), {
                 ...collectionData,
-                // name: folderName,
-                // userPath: path,
                 userId: String(this.auth.currentUser.uid),
             });
             return docRef

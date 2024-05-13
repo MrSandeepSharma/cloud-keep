@@ -43,6 +43,7 @@ function Homepage() {
   const [errMsg, setErrMsg] = useState([{folderName: "", file: ""}])
   const [folders, setFolders] = useState([])
   const [allFiles, setAllFiles] = useState([])
+  const [binData, setBinData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isFilePreviewLoading, setIsFilePreviewLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -89,7 +90,7 @@ function Homepage() {
       }
       database.addCollection("folders", dataCollection)
       closePopup(setIsCreateFolderPopupOpen)
-      fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
+      fetchData("folders", true, setFolders, "Failed to fetch folders. Check your internet connection!");
       toast.success(folderName + " Folder Created Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
@@ -105,7 +106,7 @@ function Homepage() {
     const folderId = e.target.dataset.folderid
     try {
       database.deleteData("folders", folderId)
-      fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
+      fetchData("folders", true, setFolders, "Failed to fetch folders. Check your internet connection!");
       toast.success("Folder Deleted Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
@@ -151,7 +152,7 @@ function Homepage() {
       if (uploadedFile) {
         setIsUploading(false)
         toast.success("File Uploaded Successfully")
-        fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
+        fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
         console.log("file uploaded Succesfully", uploadedFile)
       }
     } catch (error) {
@@ -225,7 +226,6 @@ function Homepage() {
             const updatedFile = { ...file, data: data };
             setFileObj(updatedFile);
             setIsFilePreviewLoading(false)
-            console.log(456)
         })
         .catch(error => {
           setIsFilePreviewLoading(false)
@@ -249,9 +249,9 @@ function Homepage() {
     try {
       const dataCollection = {...file,}
       database.addCollection("bin", dataCollection)
-      
+
       database.deleteData("files", fileId)
-      fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
+      fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
       toast.success("file Deleted Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
@@ -273,13 +273,13 @@ function Homepage() {
     return previewableTypes.test(file.type);
   };
 
-  const fetchData = useCallback(async (dataType, setData, errorMessage) => {
+  const fetchData = useCallback(async (collection, dataType, setData, errorMessage) => {
     try {
       setIsLoading(true);
-      const fetchedData = await database.getData(path, user, dataType);
+      const fetchedData = await database.getData(path, user, collection, dataType );
       const filteredData = fetchedData.filter(item => item !== undefined);
       setData(filteredData);
-      console.log(`Fetching ${dataType} data....`);
+      console.log(`Fetching ${collection} data....`);
     } catch (error) {
       toast.error(errorMessage);
     } finally {
@@ -288,12 +288,16 @@ function Homepage() {
   }, [path, user]);
 
   useEffect(() => {
-    fetchData("folders", setFolders, "Failed to fetch folders. Check your internet connection!");
+    fetchData("folders", true, setFolders, "Failed to fetch folders. Check your internet connection!");
   }, [fetchData, setFolders]);
 
   useEffect(() => {
-    fetchData("files", setAllFiles, "Failed to fetch files. Check your internet connection!");
+    fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
   }, [fetchData, setAllFiles]);
+
+  useEffect(() => {
+    fetchData("bin", false, setBinData, "Failed to fetch bins. Check your internet connection!");
+  }, [fetchData, setBinData]);
 
   return (
     <>
@@ -444,13 +448,18 @@ function Homepage() {
         }
         {
           activeMenu === "Bin" && (
-            <div className="blankpage flex-container">
-              <div className="blankpage__inner flex-container">
-                <img src={trashImg} alt="trash" />
-                <h2>Bin is empty</h2>
-                <p>Items moved to the bin will be deleted forever after 30 days</p>
-              </div>
-            </div>
+            binData.length != 0 
+              ? (
+                binData.map(bin => <h1 key={bin[1]}>{bin[0][0][0].name}</h1>)
+              ) : (
+                <div className="blankpage flex-container">
+                  <div className="blankpage__inner flex-container">
+                    <img src={trashImg} alt="trash" />
+                    <h2>Bin is empty</h2>
+                    <p>Items moved to the bin will be deleted forever after 30 days</p>
+                  </div>
+                </div>
+              )
           )
         }
       </main>
