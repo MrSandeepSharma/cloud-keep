@@ -1,5 +1,5 @@
 import { getFirestore, collection, addDoc,
-    getDocs, deleteDoc, doc } from "firebase/firestore";
+    getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import app from "./config";
 import { getAuth } from "firebase/auth";
@@ -40,6 +40,15 @@ class Database {
             return docRef
         } catch (error) {
             return error
+        }
+    }
+
+    async updateData(dataCollection, dataId, newData) {
+        try {
+            await updateDoc(doc(this.db, dataCollection, dataId), newData);
+            return "Document successfully updated!";
+        } catch (error) {
+            return error;
         }
     }
 

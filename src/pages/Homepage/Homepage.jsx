@@ -44,6 +44,7 @@ function Homepage() {
   const [folders, setFolders] = useState([])
   const [allFiles, setAllFiles] = useState([])
   const [binData, setBinData] = useState([])
+  const [starredData, setStarredData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isFilePreviewLoading, setIsFilePreviewLoading] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
@@ -258,6 +259,25 @@ function Homepage() {
     }
   }
 
+  function fileAddToStarred(e) {
+    const fileId = e.target.dataset.folderid
+    const file = allFiles.filter(file => file[1] === fileId)
+
+    try {
+      const dataCollection = {...file}
+      database.addCollection("starred", dataCollection)
+
+      const newDataForFiles = { starred: true };
+      database.updateData("files", fileId, newDataForFiles);
+
+      fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
+      fetchData("starred", false, setStarredData, "Failed to fetch bins. Check your internet connection!");
+      toast.success("file Added to Stattred Succesfully")
+    } catch (error) {
+      toast.error("Check Your Internet Connection!")
+    }
+  }
+
   function closeIsFilePreviewOpen() {
     closePopup(setIsFilePreviewOpen)
     setFileObj("")
@@ -298,6 +318,10 @@ function Homepage() {
   useEffect(() => {
     fetchData("bin", false, setBinData, "Failed to fetch bins. Check your internet connection!");
   }, [fetchData, setBinData]);
+
+  useEffect(() => {
+    fetchData("starred", false, setStarredData, "Failed to fetch bins. Check your internet connection!");
+  }, [fetchData, setStarredData]);
 
   return (
     <>
@@ -417,7 +441,7 @@ function Homepage() {
                             allFiles.length != 0 && (
                               <div className="files__container">
                                 <h2 className="files__title">All Files and Images</h2>
-                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={moveToBinFile} />
+                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={moveToBinFile} handleStarCard={fileAddToStarred} />
                               </div>
                             )
                           }
@@ -437,13 +461,18 @@ function Homepage() {
         }
         {
           activeMenu === "Starred" && (
-            <div className="blankpage flex-container">
-              <div className="blankpage__inner flex-container">
-                <img src={starImg} alt="starred files" />
-                <h2>No starred files</h2>
-                <p>Add stars to things that you want to easily fine later</p>
-              </div>
-            </div>
+            starredData.length != 0 
+              ? (
+                starredData.map(file => <h1 key={file[1]}>{file[0][0][0].name}</h1>)
+              ) : (
+                <div className="blankpage flex-container">
+                  <div className="blankpage__inner flex-container">
+                    <img src={starImg} alt="starred files" />
+                    <h2>No starred files</h2>
+                    <p>Add stars to things that you want to easily fine later</p>
+                  </div>
+                </div>
+              )
           )
         }
         {
