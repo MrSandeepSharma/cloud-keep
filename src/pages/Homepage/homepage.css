@@ -162,6 +162,10 @@
 
 .preview__wrapper h2 {
     margin-bottom: .5rem;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    text-align: left;
     font-family: var(--ff-heading);
 }
 
