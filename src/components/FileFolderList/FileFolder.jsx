@@ -1,19 +1,18 @@
-import { useState } from "react";
-
-import DetectOutsideClick from "../DetectOutsideClick";
 import { Primarybtn } from "../Button";
+import DetectOutsideClick from "../DetectOutsideClick";
 
 import "./filefolder.css"
 
 import { FaFolder, FaFileAlt, FaFileImage } from "react-icons/fa";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { useState } from "react";
 
-function FileFolderList({ 
+function FileFolder({
     type="file", 
     items=[],
-    handleDeleteCard=()=>{}, 
-    handleOpenCard=()=>{},
-    handleStarCard=()=>{}
+    handleDelete=()=>{}, 
+    handleOpen=()=>{},
+    handleOptional=()=>{}
 }) {
 
     const [openIndexes, setOpenIndexes] = useState([]);
@@ -29,50 +28,76 @@ function FileFolderList({
     }
 
   return (
-    <ul className="filefolderlist"> 
-      {
-        type === "file" 
-            ? (
-                items.map((item, index) => (
-                    <li key={item[1]} className="filefolderlist__inner">
-                        <button data-fileid={item[1]} className="filefolderlist__btn" onClick={handleOpenCard}>
-                            {item[0].fileType === "img" ? <FaFileImage /> : <FaFileAlt />}
-                            <div className="text-container">
-                                <p className="text">{item[0].name}</p>
-                            </div>
+    <ul className="filefolderlist">
+        {
+            items.map((item, index) => (
+                <li key={item[1]} className="filefolderlist__inner">
+                    <button data-fileid={type === "starred" || type === "bin" ? item[0][0][1] : item[1]} className="filefolderlist__btn" onClick={handleOpen}>
+                        { 
+                            type === "starred" || type === "bin"
+                                ? item[0][0][0].fileType === "img" ? <FaFileImage /> : (item[0][0][0].fileType === "file" ? <FaFileAlt /> : <FaFolder />)
+                                : item[0].fileType === "img" ? <FaFileImage /> : (item[0].fileType === "file" ? <FaFileAlt /> : <FaFolder />)
+                        }
+                        <div className="text-container">
+                            <p className="text">{type === "starred" || type === "bin" ? item[0][0][0].name : item[0].name}</p>
+                        </div>
+                    </button>
+                    <DetectOutsideClick onClick={() => setOpenIndexes(prev => prev.filter(i => i !== index))}>
+                        <button className="filefolderlist__toggle-btn" aria-expanded={openIndexes.includes(index)} aria-controls="filefolderlist-menu" onClick={() => toggleOpenIndex(index)}>
+                            {<BsThreeDotsVertical />}
                         </button>
-                        <DetectOutsideClick onClick={() => setOpenIndexes(prev => prev.filter(i => i !== index))}>
-                            <button className="filefolderlist__toggle-btn" aria-expanded={openIndexes.includes(index)} aria-controls="filefolderlist-menu" onClick={() => toggleOpenIndex(index)}>
-                                {<BsThreeDotsVertical />}
-                            </button>
-                            <div id="filefolderlist-menu" className="filefolderlist__menu menu-big">
-                                <Primarybtn data-folderid={item[1]} type="button" text="Add to Starred" onClick={handleStarCard} />
-                                <Primarybtn data-folderid={item[1]} type="button" text="Move to bin" onClick={handleDeleteCard} />
-                            </div>
-                        </DetectOutsideClick>
-                    </li>
-                ))
-            ) : (
-                items.map((item, index) => (
-                    <li key={item[1]} className="filefolderlist__inner">
-                        <button className="filefolderlist__btn" onClick={handleOpenCard}>
-                            {<FaFolder />}
-                            <p className="text">{item[0].name}</p>
-                        </button>
-                        <DetectOutsideClick onClick={() => setOpenIndexes(prev => prev.filter(i => i !== index))}>
-                            <button className="filefolderlist__toggle-btn" aria-expanded={openIndexes.includes(index)} aria-controls="filefolderlist-menu" onClick={() => toggleOpenIndex(index)}>
-                                {<BsThreeDotsVertical />}
-                            </button>
-                            <div id="filefolderlist-menu" className="filefolderlist__menu">
-                                <Primarybtn data-folderid={item[1]} type="button" text="Delete" onClick={handleDeleteCard} />
-                            </div>
-                        </DetectOutsideClick>
-                    </li>
-                ))
-            )
-      }
+                        {
+                            type === "file" && (
+                                <div id="filefolderlist-menu" className="filefolderlist__menu menu-big">
+                                    <Primarybtn 
+                                        data-folderid={item[1]} 
+                                        type="button" text={item[0].starred ? "Unstar" : "Star"}
+                                        onClick={handleOptional} 
+                                    />
+                                    <Primarybtn 
+                                        data-folderid={item[1]} 
+                                        type="button" text="Move to Bin" 
+                                        onClick={handleDelete} 
+                                    />
+                                </div>
+                            )
+                        }
+                        {
+                            type === "folder" && (
+                                <div id="filefolderlist-menu" className="filefolderlist__menu">
+                                    <Primarybtn data-folderid={item[1]} type="button" text="Delete" onClick={handleDelete} />
+                                </div>
+                            )
+                        }
+                        {
+                            type === "starred" && (
+                                <div id="filefolderlist-menu" className="filefolderlist__menu">
+                                    <Primarybtn data-folderid={item[0][0][1]} type="button" text="Unstar" onClick={handleDelete} />
+                                </div>
+                            )
+                        }
+                        {
+                            type === "bin" && (
+                                <div id="filefolderlist-menu" className="filefolderlist__menu menu-big">
+                                    <Primarybtn 
+                                        data-folderid={item[1]} 
+                                        type="button" text="Delete"
+                                        onClick={handleDelete} 
+                                    />
+                                    <Primarybtn 
+                                        data-folderid={item[1]} 
+                                        type="button" text="Restore" 
+                                        onClick={handleOptional} 
+                                    />
+                                </div>
+                            )
+                        }
+                    </DetectOutsideClick>
+                </li>
+            ))
+        }
     </ul>
   )
 }
 
-export default FileFolderList
+export default FileFolder

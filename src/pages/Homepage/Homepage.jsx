@@ -206,14 +206,30 @@ function Homepage() {
     }
   }
 
-  function openFile(e) {
+  function handleOpenFile(e, type) {
     const fileId = e.currentTarget.dataset.fileid
-    const fileData = allFiles.filter(file => file && file[1] === fileId)
-    const file = fileData[0][0]
-    setFileObj(file)
+    if (type === "starred") {
+      const fileData = starredData.filter(file => file[0][0][1] === fileId)
+      const file = fileData[0][0][0][0]
+      setFileObj(file)
+      openFile(file)
+    } else if (type === "bin") {
+      const fileData = binData.filter(file => file[0][0][1] === fileId)
+      const file = fileData[0][0][0][0]
+      setFileObj(file)
+      openFile(file)
+    } else {
+      const fileData = allFiles.filter(file => file && file[1] === fileId)
+      const file = fileData[0][0]
+      setFileObj(file)
+      openFile(file)
+    }
+  }
+
+  function openFile(file) {
     setIsFilePreviewOpen(true)
     setIsFilePreviewLoading(true)
-    
+
     if (file.fileType != "img") {
       fetch(file.path)
         .then(response => {
@@ -253,26 +269,59 @@ function Homepage() {
 
       database.deleteData("files", fileId)
       fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
+      fetchData("bin", false, setBinData, "Failed to fetch bins. Check your internet connection!");
       toast.success("file Deleted Succesfully")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
     }
   }
 
-  function fileAddToStarred(e) {
+  function handleOptionalFile(e) {
     const fileId = e.target.dataset.folderid
     const file = allFiles.filter(file => file[1] === fileId)
 
-    try {
-      const dataCollection = {...file}
-      database.addCollection("starred", dataCollection)
 
-      const newDataForFiles = { starred: true };
+    if (file[0][0].starred) {
+      removeFileFromStarred(file, fileId)
+    } else {
+      addFileToStarred(file, fileId)
+    }
+
+  }
+
+  function addFileToStarred(file, fileId) {
+    const starredFile = starredData.filter(file => file[0][0][1] === fileId)
+    
+    if (starredFile.length === 0) {
+      try {
+        const dataCollection = {...file}
+        database.addCollection("starred", dataCollection)
+
+        const newDataForFiles = { starred: true };
+        database.updateData("files", fileId, newDataForFiles);
+
+        fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
+        fetchData("starred", false, setStarredData, "Failed to fetch bins. Check your internet connection!");
+        toast.success("file Added to Stattred Succesfully")
+      } catch (error) {
+        toast.error("Check Your Internet Connection!")
+      }
+    } else {
+      toast.error("Check the File name again!")
+    }
+  }
+
+  function removeFileFromStarred(file, fileId) {
+    const starredFile = starredData.filter(file => file[0][0][1] === fileId)
+
+    try {
+      database.deleteData("starred", starredFile[0][1])
+      const newDataForFiles = { starred: false };
       database.updateData("files", fileId, newDataForFiles);
 
       fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
       fetchData("starred", false, setStarredData, "Failed to fetch bins. Check your internet connection!");
-      toast.success("file Added to Stattred Succesfully")
+      toast.success("file removed from Stattred")
     } catch (error) {
       toast.error("Check Your Internet Connection!")
     }
@@ -281,6 +330,39 @@ function Homepage() {
   function closeIsFilePreviewOpen() {
     closePopup(setIsFilePreviewOpen)
     setFileObj("")
+  }
+
+  function deleteStarredFile(e) {
+    const fileId = e.target.dataset.folderid
+    const file = allFiles.filter(file => file[1] === fileId)
+
+    removeFileFromStarred(file, fileId)
+  }
+
+  function deleteBinData(e) {
+    const fileId = e.currentTarget.dataset.folderid
+    try {
+      database.deleteData("bin", fileId)
+      fetchData("bin", false, setBinData, "Failed to fetch bins. Check your internet connection!");
+      toast.success("file Deleted Succesfully")
+    } catch (error) {
+      toast.error("Check Your Internet Connection!")
+    }
+  }
+
+  function reStoreFile(e) {
+    const fileId = e.currentTarget.dataset.folderid
+    const file = binData.filter(file => file[1] === fileId)
+    
+    try {
+      database.addCollection("files", file[0][0][0][0])
+      database.deleteData("bin", fileId)
+      fetchData("bin", false, setBinData, "Failed to fetch bins. Check your internet connection!");
+      fetchData("files", true, setAllFiles, "Failed to fetch files. Check your internet connection!");
+      toast.success("file re-stored Succesfully")
+    } catch (error) {
+      toast.error("Check Your Internet Connection!")
+    }
   }
 
   const checkType = (file) => {
@@ -433,7 +515,7 @@ function Homepage() {
                             folders.length != 0 && (
                               <div className="folder__container">
                                 <h2 className="folder__title">All Folders</h2>
-                                <FileFolderList type="folder" items={folders} handleOpenCard={openFolder} handleDeleteCard={deleteFolder} />
+                                <FileFolderList type="folder" items={folders} handleOpen={openFolder} handleDelete={deleteFolder} />
                               </div>
                             )
                           }
@@ -441,7 +523,7 @@ function Homepage() {
                             allFiles.length != 0 && (
                               <div className="files__container">
                                 <h2 className="files__title">All Files and Images</h2>
-                                <FileFolderList items={allFiles} handleOpenCard={openFile} handleDeleteCard={moveToBinFile} handleStarCard={fileAddToStarred} />
+                                <FileFolderList items={allFiles} handleOpen={(e) => {handleOpenFile(e, "files")}} handleDelete={moveToBinFile} handleOptional={handleOptionalFile} />
                               </div>
                             )
                           }
@@ -463,7 +545,9 @@ function Homepage() {
           activeMenu === "Starred" && (
             starredData.length != 0 
               ? (
-                starredData.map(file => <h1 key={file[1]}>{file[0][0][0].name}</h1>)
+                <div className="starred">
+                  <FileFolderList type="starred" items={starredData} handleOpen={(e) => {handleOpenFile(e, "starred")}} handleDelete={deleteStarredFile} />
+                </div>
               ) : (
                 <div className="blankpage flex-container">
                   <div className="blankpage__inner flex-container">
@@ -479,7 +563,9 @@ function Homepage() {
           activeMenu === "Bin" && (
             binData.length != 0 
               ? (
-                binData.map(bin => <h1 key={bin[1]}>{bin[0][0][0].name}</h1>)
+                <div className="bin">
+                  <FileFolderList type="bin" items={binData} handleOpen={(e) => {handleOpenFile(e, "bin")}} handleDelete={deleteBinData} handleOptional={reStoreFile} />
+                </div>
               ) : (
                 <div className="blankpage flex-container">
                   <div className="blankpage__inner flex-container">

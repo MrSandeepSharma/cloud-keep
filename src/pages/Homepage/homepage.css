@@ -64,6 +64,11 @@
     margin-bottom: 1rem;
 }
 
+.bin,
+.starred {
+    padding: var(--padding);
+}
+
 /* Create Folder Popup */
 .createfolder__popup {
     padding: 1rem 0 0;
@@ -211,5 +216,12 @@
     .toast-wrapper{
         position: relative;
         z-index: 888888888888;
+    }
+}
+
+@media (min-width: 850px) {
+    .bin,
+    .starred {
+        padding: 4rem;
     }
 }
