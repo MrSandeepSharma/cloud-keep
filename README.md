@@ -1,4 +1,4 @@
-![cloud keep](https://github.com/MrSandeepSharma/cloud-keep/assets/142038020/261fad63-76c0-4c69-bccf-c5f9e1e53f94)
+![CloudKeep](https://github.com/MrSandeepSharma/cloud-keep/assets/142038020/16c72322-82eb-4284-9b61-b74050088c1a)
 
 ## Overview 👋
 
