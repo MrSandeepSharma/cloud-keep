@@ -407,7 +407,11 @@ function Homepage() {
 
   return (
     <>
-      <HomeHeader />
+      <HomeHeader 
+        fileOpen={(e) => {handleOpenFile(e, activeMenu.toLowerCase())}} 
+        dataType={activeMenu === "Starred" ? "starred" : activeMenu === "Bin" ? "bin" : "file"}
+        data={activeMenu === "Starred" ? starredData : activeMenu === "Bin" ? binData : allFiles} 
+      />
       <SideNav toggleNavItems={toggleNavItems} active={activeMenu} onClick={(e)=>{setActiveMenu(e.currentTarget.textContent)}} />
       <main id="main" className="homepage__main">
         <div className="toast-wrapper">

@@ -6,14 +6,14 @@ import { InputSearch } from "../Input"
 
 import "./header.css"
 
-function HomeHeader({ className="", ...rest }) {
+function HomeHeader({ className="", data=[], dataType="file", fileOpen=()=>{}, ...rest }) {
   return (
     <header className={`homeheader container ${className}`} {...rest}>
         <Link className="skip-main outline" path="#" onClick={() => window.location.replace("#main")}>Skip to main content</Link>
         <Link to="/" className="header__logo outline">
             <Logo />
         </Link>
-        <InputSearch placeholder="Search in cloud keep" />
+        <InputSearch dataType={dataType} fileOpen={fileOpen} data={data} placeholder="Search in cloud keep" />
         <Profile />
     </header>
   )
